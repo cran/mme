@@ -1,0 +1,80 @@
+\name{phi.mult.it}
+\alias{phi.mult.it}
+\title{Initial values for the variance components in Model 2}
+\usage{
+  phi.mult.it(beta.0, y, Xk, M, u1, u2)
+}
+\arguments{
+  \item{beta.0}{initial values for the fixed effects
+  obtained from \code{\link[mme]{initial.values}}.}
+
+  \item{y}{matrix with the response variable obtained from
+  \code{\link[mme]{data.mme}}. The rows are the domains and
+  the columns are the categories of the response variable.}
+
+  \item{Xk}{list of matrices with the auxiliary variables
+  per category obtained from \code{\link[mme]{data.mme}}.
+  The dimension of the list is the number of domains.}
+
+  \item{M}{vector with the sample size of the areas.}
+
+  \item{u1}{vector with the initial values for the first
+  random effect obtained from
+  \code{\link[mme]{initial.values}}.}
+
+  \item{u2}{vector with the initial values for the second
+  random effect obtained from
+  \code{\link[mme]{initial.values}}.}
+}
+\value{
+  phi.0 vector of the initial values for the variance
+  components.
+}
+\description{
+  This function is used in
+  \code{\link[mme]{initial.values}} to calculate the
+  initial values for the variance components in the
+  multinomial mixed model with two independent random
+  effects for each category of the response variable: one
+  domain random effect (u1) and another independent time
+  and domain random effect (u2) (Model 2).
+}
+\examples{
+require(Matrix)
+
+k=3 #number of categories of the response variable
+pp=c(1,1) #vector with the number of auxiliary variables in each category
+data(simdata2)  #data
+mod=2 #Type of model
+datar=data.mme(simdata2,k,pp,mod)
+D=nrow(simdata2)
+###fixed effects values
+beta.new=list()
+beta.new[[1]]=matrix(c( 1.3,-1),2,1)
+beta.new[[2]]=matrix(c( -1.6,1),2,1)
+## random effects values
+u1.new=rep(0.01,((k-1)*datar$d))
+dim(u1.new)=c(datar$d,k-1)
+u2.new=rep(0.01,((k-1)*D))
+dim(u2.new)=c(D,k-1)
+
+##Initial variance components
+phi=phi.mult.it(beta.new,datar$y,datar$Xk,datar$n,u1.new,u2.new)
+}
+\references{
+  Lopez-Vizcaino, ME, Lombardia, MJ and Morales, D (2013).
+  Multinomial-based small area estimation of labour force
+  indicators. Statistical Modelling, 13, 153-178.
+}
+\seealso{
+  \code{\link[mme]{data.mme}},
+  \code{\link[mme]{initial.values}},
+  \code{\link[mme]{wmatrix}}, \code{\link[mme]{prmu.time}},
+  \code{\link[mme]{Fbetaf.it}},
+  \code{\link[mme]{phi.direct.it}},
+  \code{\link[mme]{sPhikf.it}}, \code{\link[mme]{ci}},
+  \code{\link[mme]{modelfit2}}, \code{\link[mme]{msef.it}},
+  \code{\link[mme]{mseb}}.
+}
+\keyword{models}
+

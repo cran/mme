@@ -1,0 +1,80 @@
+\name{msef.ct}
+\alias{msef.ct}
+\title{Analytic MSE for Model 3}
+\usage{
+  msef.ct(p, X, result, M, MM)
+}
+\arguments{
+  \item{p}{vector with the number of the auxiliary
+  variables per category.}
+
+  \item{X}{list of matrices with the auxiliary variables
+  obtained from \code{\link[mme]{data.mme}}. The dimension
+  of the list is the number of categories of the response
+  variable minus one.}
+
+  \item{result}{the output of the function
+  \code{\link[mme]{modelfit3}}.}
+
+  \item{M}{vector with the area sample sizes.}
+
+  \item{MM}{vector with the population sample sizes.}
+}
+\value{
+  mse.analitic is a matrix with the MSE estimator
+  calculated by adapting the explicit formulas of Prasad
+  and Rao (1990).
+}
+\description{
+  This function calculates the analytic MSE for the
+  multinomial mixed model with two independent random
+  effects for each category of the response variable: one
+  random effect associated with the domain and another
+  correlated random effect associated with time and domain
+  (Model 3). See details of the model and the expresion of
+  mse in Lopez-Vizcaino et al. (2013). The formulas of
+  Prasad and Rao (1990) are adapted to Model 3. This
+  function uses the output of \code{\link[mme]{modelfit3}}.
+}
+\examples{
+\dontrun{
+library(mixstock)
+library(Matrix)
+library(MASS)
+
+k=3 #number of categories of the response variable
+pp=c(1,1) #vector with the number of auxiliary variables in each category
+mod=3 #type of model
+data(simdata3) #data
+datar=data.mme(simdata3,k,pp,mod)
+##Model fit
+result=modelfit3(d,t,pp,datar$Xk,datar$X,datar$Z,datar$initial,datar$y[,1:(k-1)],
+       datar$n,datar$N,0)
+
+##Analytic MSE
+msef=msef.ct(pp,datar$X,result,datar$n,datar$N)}
+}
+\references{
+  Lopez-Vizcaino, ME, Lombardia, MJ and Morales, D (2013).
+  Small area estimation of labour force indicators under a
+  multinomial mixed model with correlated time and area
+  effects. Submitted for review.
+
+  Prasad, NGN, Rao, JNK (1990).The estimation of the mean
+  squared error of small area estimators. Journal of the
+  American Statistical Association, 85, 163-171.
+}
+\seealso{
+  \code{\link[mme]{data.mme}},
+  \code{\link[mme]{initial.values}},
+  \code{\link[mme]{wmatrix}},
+  \code{\link[mme]{phi.mult.ct}},
+  \code{\link[mme]{prmu.time}},
+  \code{\link[mme]{phi.direct.ct}},
+  \code{\link[mme]{sPhikf.ct}},
+  \code{\link[mme]{modelfit3}},
+  \code{\link[mme]{Fbetaf.ct}}, \code{\link[mme]{ci}},
+  \code{\link[mme]{omega}}, \code{\link[mme]{mseb}}.
+}
+\keyword{models}
+

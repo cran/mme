@@ -1,0 +1,73 @@
+\name{msef}
+\alias{msef}
+\title{Analytic MSE for Model 1}
+\usage{
+  msef(pp, X, Z, resul, MM, M)
+}
+\arguments{
+  \item{resul}{the output of the function
+  \code{\link[mme]{modelfit1}}.}
+
+  \item{X}{list of matrices with the auxiliary variables
+  obtained from \code{\link[mme]{data.mme}}. The dimension
+  of the list is the number of categories of the response
+  variable minus one.}
+
+  \item{Z}{design matrix of random effects obtained from
+  \code{\link[mme]{data.mme}}.}
+
+  \item{pp}{vector with the number of the auxiliary
+  variables per category.}
+
+  \item{M}{vector with the area sample sizes.}
+
+  \item{MM}{vector with the population sample sizes.}
+}
+\value{
+  mse is a matrix with the MSE estimator calculated by
+  adapting the explicit formulas of Prasad and Rao (1990).
+}
+\description{
+  This function calculates the analytic MSE for the
+  multinomial mixed model with one independent random
+  effect per category of the response variable (Model 1).
+  See Lopez-Vizcaino et al. (2013), section 4, for details.
+  The formulas of Prasad and Rao (1990) are adapted to
+  Model 1. This function uses the output of
+  \code{\link[mme]{modelfit1}}.
+}
+\examples{
+require(Matrix)
+
+k=3 #number of categories of the response variable
+pp=c(1,1) #vector with the number of auxiliary variables in each category
+data(simdata)  #data
+mod=1 # type of model
+datar=data.mme(simdata,k,pp,mod)
+# Model fit
+result=modelfit1(pp,datar$Xk,datar$X,datar$Z,datar$initial,datar$y[,1:(k-1)],
+       datar$n,datar$N)
+
+#Analytic MSE
+mse=msef(pp,datar$X,datar$Z,result,datar$N,datar$n)
+}
+\references{
+  Lopez-Vizcaino, ME, Lombardia, MJ and Morales, D (2013).
+  Multinomial-based small area estimation of labour force
+  indicators. Statistical Modelling, 13, 153-178.
+
+  Prasad, NGN, Rao, JNK (1990).The estimation of the mean
+  squared error of small area estimators. Journal of the
+  American Statistical Association, 85, 163-171.
+}
+\seealso{
+  \code{\link[mme]{data.mme}},
+  \code{\link[mme]{initial.values}},
+  \code{\link[mme]{wmatrix}}, \code{\link[mme]{phi.mult}},
+  \code{\link[mme]{prmu}}, \code{\link[mme]{phi.direct}},
+  \code{\link[mme]{sPhikf}}, \code{\link[mme]{modelfit1}},
+  \code{\link[mme]{Fbetaf}}, \code{\link[mme]{ci}},
+  \code{\link[mme]{mseb}}.
+}
+\keyword{models}
+

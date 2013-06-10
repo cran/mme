@@ -1,0 +1,39 @@
+\name{addtolist}
+\alias{addtolist}
+\title{Add items from a list}
+\usage{
+  addtolist(B_d, t, d)
+}
+\arguments{
+  \item{B_d}{a list in each area.}
+
+  \item{t}{number of time periods.}
+
+  \item{d}{number of areas.}
+}
+\value{
+  B_d a list of dimension d.
+}
+\description{
+  This function adds items from a list of dimension d*t,
+  where d is the number of areas and t is the number of
+  times periods.
+}
+\examples{
+k=3  #number of categories for the response variable
+pp=c(1,1) #vector with the number of auxiliary variables in each category
+data(simdata2) # data
+mod=2
+datar=data.mme(simdata2,k,pp,mod)
+
+##Add the time periods
+l=addtolist(datar$X,datar$t,datar$d)
+}
+\seealso{
+  \code{\link[mme]{Fbetaf.it}},
+  \code{\link[mme]{Fbetaf.ct}},
+  \code{\link[mme]{modelfit2}},
+  \code{\link[mme]{modelfit3}}
+}
+\keyword{models}
+

@@ -1,0 +1,83 @@
+\name{data.mme}
+\alias{data.mme}
+\title{Function to generate matrices and the initial values}
+\usage{
+  data.mme(fi, k, pp, mod)
+}
+\arguments{
+  \item{fi}{input data set with (d x t) rows and
+  4+k+sum(pp) columns. The first four columns of the data
+  set are, in this order: the area indicator (integer), the
+  time indicator (integer), the sample size of each domain
+  and the population size of each domain. The following k
+  columns are the categories of the response variable.
+  Then, the auxiliary variables: first, the auxiliary
+  variables of the first category, second, the auxiliary
+  variables of the second category, and so on. Examples of
+  input data sets are in \code{\link[mme]{simdata}},
+  \code{\link[mme]{simdata2}} and
+  \code{\link[mme]{simdata3}}.}
+
+  \item{k}{number of categories of the response variable.}
+
+  \item{pp}{vector with the number of auxiliary variables
+  per category.}
+
+  \item{mod}{a number specifying the type of models:
+  1=multinomial mixed model with one independent random
+  effect in each category of the response variable (Model
+  1), 2=multinomial mixed model with two independent random
+  effects in each category of the response variable: one
+  domain random effect and another independent time and
+  domain random effect (Model 2) and 3= multinomial model
+  with two independent random effects in each category of
+  the response variable: one domain random effect and
+  another correlated time and domain random effect (Model
+  3).}
+}
+\value{
+  A list containing the following components.
+  \item{n}{vector with the area sample sizes.}
+  \item{N}{vector with the area population sizes.}
+  \item{Z}{design matrix of random effects.} \item{Xk}{list
+  of matrices with the auxiliary variables per category.
+  The dimension of the list is the number of domains}
+  \item{X}{list of matrices with the auxiliary variables.
+  The dimension of the list is the number of categories of
+  the response variable minus one.} \item{y}{matrix with
+  the response variable. The rows are the domains and the
+  columns are the categories of the response variable.}
+  \item{initial}{a list with the initial values for the
+  fixed and the random effects obtained from
+  \code{\link[mme]{initial.values}} .}
+}
+\description{
+  Based on the input data, this function generates some
+  matrices that are required in subsequent calculations and
+  the initial values obtained from the function
+  \code{\link[mme]{initial.values}}.
+}
+\examples{
+k=3 #number of categories of the response variable
+pp=c(1,1) #vector with the number of auxiliary variables in each category
+data(simdata2) #Data
+mod=2
+
+##Needed matrix and initial values
+datar=data.mme(simdata2,k,pp,mod)
+}
+\references{
+  Lopez-Vizcaino, ME, Lombardia, MJ and Morales, D (2013).
+  Multinomial-based small area estimation of labour force
+  indicators. Statistical Modelling, 13, 153-178.
+}
+\seealso{
+  \code{\link[mme]{initial.values}},
+  \code{\link[mme]{wmatrix}}, \code{\link[mme]{phi.mult}},
+  \code{\link[mme]{prmu}}, \code{\link[mme]{Fbetaf}},
+  \code{\link[mme]{phi.direct}}, \code{\link[mme]{sPhikf}},
+  \code{\link[mme]{ci}}, \code{\link[mme]{modelfit1}},
+  \code{\link[mme]{msef}}, \code{\link[mme]{mseb}}
+}
+\keyword{models}
+

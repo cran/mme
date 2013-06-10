@@ -1,0 +1,628 @@
+%\VignetteIndexEntry{mme: tutorial for mme package}
+%\VignetteKeywords{small area,multinomial mixed models}
+%\VignettePackage{mme}
+\documentclass[nojss]{jss}
+\usepackage{amsmath,amsthm,amsfonts,amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{Sweave}
+\SweaveOpts{keep.source=TRUE}
+
+\newcommand{\field}[1]{\mathbb{#1}}
+\newcommand{\N}{\field{N}}
+\newcommand{\bbR}{\field{R}} %% Blackboard R
+\newcommand{\bbS}{\field{S}} %% Blackboard S
+\def \AA {\hbox{\boldmath$A$}}
+\def \BB {\hbox{\boldmath$B$}}
+\def \CC {\hbox{\boldmath$C$}}
+\def \DD {\hbox{\boldmath$D$}}
+\def \EE {\hbox{\boldmath$E$}}
+\def \FF {\hbox{\boldmath$F$}}
+\def \GG {\hbox{\boldmath$G$}}
+\def \HH {\hbox{\boldmath$H$}}
+\def \II {\hbox{\boldmath$I$}}
+\def \JJ {\hbox{\boldmath$J$}}
+\def \KK {\hbox{\boldmath$K$}}
+\def \LL {\hbox{\boldmath$L$}}
+\def \MM {\hbox{\boldmath$M$}}
+\def \PP {\hbox{\boldmath$P$}}
+\def \QQ {\hbox{\boldmath$Q$}}
+\def \RR {\hbox{\boldmath$R$}}
+\def \SS {\hbox{\boldmath$S$}}
+\def \TT {\hbox{\boldmath$T$}}
+\def \UU {\hbox{\boldmath$U$}}
+\def \VV {\hbox{\boldmath$V$}}
+\def \XX {\hbox{\boldmath$X$}}
+\def \YY {\hbox{\boldmath$Y$}}
+\def \ZZ {\hbox{\boldmath$Z$}}
+\def \WW {\hbox{\boldmath$W$}}
+\def \aa {\hbox{\boldmath$a$}}
+\def \bb {\hbox{\boldmath$b$}}
+\def \dd {\hbox{\boldmath$d$}}
+\def \ee {\hbox{\boldmath$e$}}
+\def \ff {\hbox{\boldmath$f$}}
+\def \gg {\hbox{\boldmath$g$}}
+\def \hh {\hbox{\boldmath$h$}}
+\def \kk {\hbox{\boldmath$k$}}
+\def \mm {\hbox{\boldmath$m$}}
+\def \pp {\hbox{\boldmath$p$}}
+\def \ss {\hbox{\boldmath$s$}}
+\def \tt {\hbox{\boldmath$t$}}
+\def \uu {\hbox{\boldmath$u$}}
+\def \vv {\hbox{\boldmath$v$}}
+\def \xx {\hbox{\boldmath$x$}}
+\def \yy {\hbox{\boldmath$y$}}
+\def \zz {\hbox{\boldmath$z$}}
+\def \ww {\hbox{\boldmath$w$}}
+\def \xxi {\hbox{\boldmath$xi$}}
+\def \uno {\hbox{\boldmath$1$}}
+\def \cero {\hbox{\boldmath$0$}}
+\def\mmu {\hbox{\boldmath$\mu$}}
+\def\aalpha {\hbox{\boldmath$\alpha$}}
+\def\ssigma {\hbox{\boldmath$\sigma$}}
+\def\SSigma {\hbox{\boldmath$\Sigma$}}
+\def \ggamma {\hbox{\boldmath$\gamma$}}
+\def \bbeta {\hbox{\boldmath$\beta$}}
+\def \ddelta {\hbox{\boldmath$\delta$}}
+\def \ppi {\hbox{\boldmath$\pi$}}
+\def \ttheta {\hbox{\boldmath$\theta$}}
+\def \eeta {\hbox{\boldmath$\eta$}}
+\def \eepsilon {\hbox{\boldmath$\epsilon$}}
+\def \vvarepsilon {\hbox{\boldmath$\varepsilon$}}
+\def \llambda {\hbox{\boldmath$\lambda$}}
+\def \vvarphi {\hbox{\boldmath$\varphi$}}
+\def \oomega {\hbox{\boldmath$\omega$}}
+\def \vs {\hbox{\boldmath$\varsigma$}}
+\def \vr {\hbox{\boldmath$\varrho$}}
+\def \xxi {\hbox{\boldmath$\xi$}}
+\def \B {{\cal B}}
+\def \C {{\cal C}}
+\def \N {{\cal N}}
+\def \X {{\cal X}}
+\def \Y {{\cal Y}}
+\def \Z {{\cal Z}}
+\newcommand{\rn}[1]{I\!\! R^{\mathstrut #1}}
+\newcommand{\ent}{\mathbb{Z}}
+\newcommand{\ds}{\displaystyle}
+\newcommand{\abs}[1]{\lvert#1\rvert}
+\newcommand{\dif}[1]{\widetilde{#1}}
+\newcommand{\U}{{\cal U}}
+\newcommand{\V}{{\cal V}}
+\def \iR {I\!\!R}
+\def \NN {I\!\!N}
+\def \ltt {<\!\!<}
+\def \dim {{\rm dim}}
+\def \tT {\theta\in\Theta}
+\def \d {{\rm d}}
+\def \T {{\cal T}}
+\def \Pr {{\rm Pr}}
+\def\eqdis{=^{^{\hskip-.075in d}}}
+\def\simdis{\simeq^{^{\hskip-.075in d}}}
+\def\mini{\mathop{\rm\mbox{min}}}
+\def\Supi{\mathop{\rm\mbox{Sup}}}
+\def\maxi{\mathop{\rm\mbox{max}}}
+\def\real{{\hbox{\sf I}}\!\!\: {\hbox{\sf R}}}
+\def\nat{{\hbox{\sf I}}\!\!\, {\hbox{\sf N}}}
+\def \diag {\mbox{diag}}
+\def \tr {\mbox{traza}}
+
+\author{E L\'opez-Vizca\'ino, M J Lombard\'ia Corti\~na, D Morales Gonz\'alez}
+\title{mme: a package for small area estimation with multinomial mixed models}
+
+\Abstract{ 
+The \pkg{mme} package for \proglang{R} \citep{R}
+implements three multinomial area level mixed models 
+for small area estimation. The first model is the area level 
+multinomial mixed model with independent random effects for each category 
+of the response variable \citep{eu1}. The second model 
+takes advantage from the availability of survey data from different time
+periods and uses a multinomial model with independent random effects for 
+each category of the response variable and with independent time and domain
+random effects. The third model is similar to the second one, but with 
+correlated time and domain random effects \citep{eu2}. 
+In all the models the package uses two approaches to estimate the mean square 
+error (MSE), first through an analytical expression and second by bootstrap
+ techniques. 
+
+}
+
+\Keywords{small area, R package, multinomial mixed models.}
+
+
+\Address{Esther L\'opez Vizca\'ino\\
+  Instituto Galego de Estat\'istica\\
+  Complexo Administrativo San L\'azaro\\
+  15703 Santiago de Compostela\\
+  E-mail: \email{mestherlv32@gmail.com}\\
+  \\
+}
+
+\begin{document}
+
+\section{Overview}
+
+Small area estimation problems appear when the domain simple sizes are small and direct estimates are not precise. In the small area estimation context, an estimator of a parameter in a given domain is direct if it is based only on the sample data of the specific domain. A drawback of these estimators is that they cannot be calculated when there is no sample observations in an area of interest.
+
+Generally small area estimation techniques can be divided into design-based methods and model-based methods. The model-based methods make inference by taking into account the underlying model.The estimators based on these methods are useful because they give to practitioners an idea of how the data generation process is and how the different sources of information are incorporated.
+Mixed models are suitable for small area estimation due to its flexibility to make an effective combination of different sources of information and to its capacity to describe the various sources of error.
+These models incorporate random area effects that explain the additional variability that is not explained by the fixed part of the model.
+
+The objective of this manuscript is to present a R package that implements three
+multinomial area level mixed models for small area estimation. The first
+model is the area level multinomial mixed model with independent random effects for each category of the response variable 
+\citep{eu1}. The second model takes advantage from the availability of survey data from different 
+time periods and uses a multinomial model with independent random effects for each category of the response variable and with independent time and domain random effects. The third model is similar to the second one, but with correlated time and domain random effects \citep{eu2}. In all the models the package use two approaches to estimate the mean square error (MSE), first through an analytical expression and second by bootstrap techniques.
+
+
+\section{Models}
+
+Let us start by giving some notation and assumptions.
+Let us use indexes $k=1, \ldots, q-1$, $d=1, \ldots,D$ and $t=1, \ldots, T$ for the categories of the target variable,
+for the $D$ domains and for the $T$ time periods respectively.
+Let $u_{1,dk}$ and $u_{2,dkt}$ be the random effects associated to the domain $d$ and the category $k$ and to the
+ domain $d$, the category $k$ and the time instant $t$ respectively.
+In the third model (Model 3) we write the random effects in the form
+\begin{eqnarray*}
+\uu_1&=&\underset{1\leq d \leq D}{\hbox{col}}(\uu_{1,d}),\quad
+\uu_{1,d}=\underset{1\leq k \leq q-1}{\hbox{col}}(u_{1,dk}),\quad
+\uu_2=\underset{1\leq d \leq D}{\hbox{col}}(\uu_{2,d})
+\\
+\uu_{2,d}&=&\underset{1\leq k \leq q-1}{\hbox{col}}(\uu_{2,dk}),\quad
+\uu_{2,dk}=\underset{1\leq t \leq {T}}{\hbox{col}}(u_{2,dkt}),\quad
+\uu_{2,dt}=\underset{1\leq k \leq {q-1}}{\hbox{col}}(u_{2,dkt}),
+\end{eqnarray*}
+and we suppose that
+\begin{enumerate}
+\item
+$\uu_1$ and $\uu_2$ are independent,
+\item
+$\uu_1\sim N(\cero,\VV_{u_1})$, where
+$\VV_{u_1}=\underset{1\leq d \leq D}{\hbox{diag}}(\underset{1\leq k \leq q-1}{\hbox{diag}}(\varphi_{1k}))$, $k=1,\ldots,q-1$.
+\item
+$\uu_{2,dk}\sim N(\cero,\VV_{u_{2,dk}})$, $d=1,\ldots,D$, $k=1,\ldots,q-1$, are independent with covariance matrix AR(1), i.e. $\VV_{u_{2,dk}}=\varphi_{2k}{\Omega}_d(\phi_k)$ and
+$$
+\Omega_d(\phi_k)=\Omega_{d,k}=\frac{1}{1-\phi_k^2}\left(\begin{array}{ccccc}
+1&\phi_k&\ldots&\phi_k^{{T}-2}&\phi_k^{{T}-1}\\
+\phi_k&1&\ddots&&\phi_k^{{T}-2}\\
+\vdots&\ddots&\ddots&\ddots&\vdots\\
+\phi_k^{{T}-2}&&\ddots&1&\phi_k\\
+\phi_k^{{T}-1}&\phi_k^{{T}-2}&\ldots&\phi_k&1
+\end{array}\right)_{{T}\times {T}}.
+$$
+\end{enumerate}
+It holds that $\VV_u=\mbox{var}(\uu)=\hbox{diag}(\VV_{u_1},\VV_{u_2})$, where
+$\VV_{u_2}=\mbox{var}(\uu_2)=\underset{1\leq d \leq D}{\hbox{diag}}(\underset{1\leq k \leq q-1}{\hbox{diag}}(\VV_{u_{2,dk}}))$.
+We also assume that the response vectors $\yy_{dt}=\underset{1\leq k \leq q-1}{\hbox{col}}(y_{dkt})$,
+conditioned to $\uu_{1,d}$ and $\uu_{2,dt}$,  are independent with multinomial distributions
+\begin{equation}\label{multind1}
+\left.\yy_{dt}\right|_{\uu_{1,d},\uu_{2,dt}}\sim\hbox{M}(\nu_{dt},p_{d1t},\ldots,p_{dq-1t} ),\,\,
+d=1,\ldots,D,\,\, t=1,\ldots,{T}.
+\end{equation}
+where the $\nu_{dt}$'s are known integer numbers.
+The covariance matrix of $\yy_{dt}$ conditioned to $\uu_{1,d}$ and $\uu_{2,dt}$ is
+$\mbox{var}(\yy_{dt}|\uu_{1,d},\uu_{2,dt})=\WW_{dt}=\nu_{dt}[\mbox{diag}(\pp_{dt})-\pp_{dt}\pp_{dt}^\prime]$,
+where $\pp_{dt} = \underset{1\leq k \leq q-1}{\mbox{col}}(p_{dkt})$ and
+$\mbox{diag}(\pp_{dt}) = \underset{1\leq k \leq q-1}{\mbox{diag}}(p_{dkt})$.
+For the natural parameters $\eta_{dkt}=\log\frac{p_{dkt}}{p_{dqt}}$, we assume the model
+\begin{equation}\label{multind11}
+\eta_{dkt}=\xx_{dkt}\bbeta_k+ u_{1,dk}+u_{2,dkt},\quad d=1,\ldots,D,\,k=1,\ldots,q-1,\,t=1,\ldots,T,
+\end{equation}
+where
+$\xx_{dkt}=\underset{1\leq r \leq p_r}{\hbox{col}^\prime}(x_{dktr})$,
+$\bbeta_{k}=\underset{1\leq r \leq p_k}{\hbox{col}}(\beta_{kr})$ and
+$p=\sum_{k=1}^{q-1}p_k$.
+
+We also consider two simpler models.
+Model 2 is the restriction of  Model 3 to $\phi_1=\ldots=\phi_{q-1}=0$.
+Model 1 is obtained by restricting Model 2 to one time period ($T=1$) and by considering only the random effect $\uu_1$.
+This is the model studied by \citet{eu1}.
+For the sake of brevity we skip formulas for Models 1-2.
+In matrix notation, Model 3 is
+$$
+\eeta=\XX\bbeta+\ZZ_1\uu_1+\ZZ_2\uu_2=\XX\bbeta+\ZZ\uu,
+$$
+where
+$\ZZ=(\ZZ_1^\prime,\ZZ_2^\prime)^\prime$,
+$\eeta=\underset{1\leq d \leq D}{\hbox{col}}(\eeta_d)$,
+$\XX=\underset{1\leq d \leq D}{\hbox{col}}(\XX_d)$,
+$\ZZ_1=\underset{1\leq d \leq D}{\hbox{diag}}(\ZZ_{1d})$,
+$\ZZ_2=\underset{1\leq d \leq D}{\hbox{diag}}(\ZZ_{2d})$,
+\begin{eqnarray*}
+\eeta_d&=&\underset{1\leq k \leq q-1}{\hbox{col}}(\underset{1\leq t \leq T}{\hbox{col}}(\eta_{dkt})),
+\quad
+\XX_d=\underset{1\leq k \leq q-1}{\hbox{diag}}(\underset{1\leq t \leq T}{\hbox{col}}(\xx_{dkt})),
+\quad
+\bbeta=\underset{1\leq k \leq q-1}{\hbox{col}}(\bbeta_k),
+\\
+\ZZ_{1d}&=&\underset{1\leq k \leq q-1}{\hbox{diag}}(\uno_T),
+\quad
+\ZZ_{2d}=\underset{1\leq k \leq q-1}{\hbox{diag}}(\underset{1\leq t \leq T}{\hbox{diag}}(1))
+=\II_{T(q-1)},
+\quad
+\uno_T=\underset{1\leq t \leq T}{\hbox{col}}(1).
+\end{eqnarray*}
+To fit the model we combine the PQL method, introduced by \citet{breslow}
+for estimating and predicting the $\beta_{kr}$'s, the $u_{1,dk}$'s and the $u_{2,dkt}$'s, with the REML method
+for estimating the variance components $\varphi_{1k}$, $\varphi_{2k}$ and $\phi_k$, $k=1,\ldots,q-1$.
+The presented method is based on a normal approximation to the joint probability distribution of the vector $(\yy,\uu)$.
+The combined algorithm was first introduced by \citet{schall} and later used by \citet{saeichambers2003}, \citet{molina2007}
+and \citet{domingo2009} in applications of generalized linear mixed models to small area estimation problems.
+We adapt the combined algorithm to Model 3.
+The algorithm has two parts.
+In the first part the algorithm updates the values of $\bbeta$, $\uu_{1}$ and $\uu_{2}$.
+In the second part it updates the variance components.\\
+
+For the estimation of the mean squared error (MSE) of model-based small area estimators we adapt the resampling approaches
+appearing in \citet{wences2008} to introduce a parametric bootstrap procedure.
+We also give an approximation to the MSE based on a Taylor linearization.
+By applying the ideas of \citep{prasadrao1990} to the linearized model,
+the MSE is approximated and an estimator of the given approximation is derived.
+
+\section{The package mme}
+
+In the mme package we introduced a range of new functions that may be of interest to those conducting applied research. The
+nine principal new functions are summarized in Table 1.
+\begin{table}[!ht]
+  \centering\raggedright
+  {\small
+    \begin{tabular}{p{.75in}|p{2.75in}|p{2in}}
+			\hline
+			\textbf{Function} & \textbf{Description} & \textbf{Reference} \\ 
+			\hline
+			\code{data.mme} &  Based on the input data this function generates some
+matrices that are required in subsequent calculations and the initial values for the fitting algorithm& \citet{eu1}\\
+\code{fitmodel1} & This function fits the multinomial mixed model
+with one independent random effect per category of the
+response variable (Model 1) & \citet{eu1} \\
+\code{fitmodel2} &  This function fits the multinomial mixed model
+with two independent random effects for each category of
+the response variable: one domain random effect and
+another independent time and domain random effect (Model
+2) & \citet{eu2} \\
+\code{fitmodel3} & This function fits the multinomial mixed model
+with two independent random effects for each category of
+the response variable: one domain random effect and
+another correlated time and domain random effect (Model
+3)& \citet{eu2}\\
+\code{model} & This function chooses one of the three models& \citet{eu1} and \citet{eu2}\\
+\code{msef} & This function calculates the analytic MSE for
+Model 1& \citet{eu1}\\
+\code{msef.it} & This function calculates the analytic MSE for
+Model 2&\citet{eu1}\\
+\code{msef.ct} & This function calculates the analytic MSE for
+Model 3& \citet{eu2}\\
+\code{mseb} & This function calculates the bias and the MSE
+for the multinomial mixed effects models using parametric
+bootstrap&
+\citet{eu1} and \citet{eu2}\\
+\hline
+    \end{tabular}
+        \label{functions}
+  }
+ \caption{New mme functions.}
+\end{table}
+
+In what follows we provide illustrative examples of the use of the functions describe in 
+Table 1. Many of these functions rely on numerical
+integration and can be computationally demanding. 
+
+\section{Example to fit model 1}
+
+The following code provides and example to fit the model 1. It is 
+necessary to use a data frame with this variables: area indicator, time 
+indicator, sample, population,  categories of the response variable and 
+covariates of each category of the response variable. 
+The package requires two imput parameters: $pp$ is a vector
+with the number of auxiliary variables in each category and $k$ is the number of categories of the response variable.
+The example uses a data frame with 50 small areas and with 10 periods. However, this  
+example only works with the last period. The response variable has three categories
+($k=3$), and we use one covariate for each category, then $pp=c(1,1)$. The last three columns of
+the data frame contain the direct estimators of the categories of the response variable.
+
+<<eval=TRUE,echo=FALSE,results=hide,keep.source=TRUE>>=
+library(mme)
+options(prompt = "R> ", np.messages = FALSE, digits = 3)
+@ 
+
+
+<<eval=TRUE,echo=FALSE,keep.source=TRUE>>=
+
+simulaciones3<-function(d,t,k){
+D=d*t
+u=matrix(0,d,t)
+x1=matrix(0,d,t)
+x2=matrix(0,d,t)
+u1=matrix(0,d,t)
+u2=matrix(0,d,t)
+for (i in 1:d){
+	for (j in 1:t){
+		u1[i,j]=((i-d)/d+1/2+j/t)/3
+		u2[i,j]=((i-d)/d+2/2+j/t)/3
+		x1[i,j]=1+u1[i,j]
+		x2[i,j]=1+sqrt(2)*(0*u1[i,j]+sqrt(1-(0*0))*u2[i,j])
+}}
+phi1=c(1,2)
+phi2=c(0.25,0.50)
+u1=matrix(0,d,k-1)
+s = 12345678
+set.seed(s)
+u1[,1]=rnorm(d,mean=0,sd=sqrt(phi1[1]))
+u1[,2]=rnorm(d,mean=0,sd=sqrt(phi1[2]))
+
+u2=matrix(0,D,k-1)
+library(MASS)
+rho=c(0.50,0.75)
+a=omega(t,k,rho,phi2)
+ceros=matrix(rep(0,t),t,1)
+datos=mvrnorm(d,ceros,((phi2[1])*(a[[1]][[1]])))
+u2[,1]=matrix(t(datos),D,1)
+
+datos=mvrnorm(d,ceros,((phi2[2])*(a[[1]][[2]])))
+u2[,2]=matrix(t(datos),D,1)
+u11=matrix(0,D,k-1)
+jj=1
+for (i in 1:d){
+	for(j in 1:t){
+			u11[jj,]=u1[i,]
+			jj=jj+1}}
+
+x1=matrix(t(x1),d*t,1)
+x2=matrix(t(x2),d*t,1,byrow=TRUE)
+ind=matrix(rep(1.3,D),D,1)
+ind2=matrix(rep(-1.6,D),D,1)
+beta=c(-1,1)
+pr=matrix(0,D,k-1)
+theta=matrix(0,D,k-1)
+for (j in 1:(k-1)){
+	if (j==1) {theta[,j]=ind+x1*beta[j]+u11[,j]+u2[,j]}
+	if (j==2) {theta[,j]=ind2+x2*beta[j]+u11[,j]+u2[,j]}
+}
+
+suma=rowSums(exp(theta))
+a=1/(1+suma) 
+for (i in 1:(k-1)){
+	pr[,i]=a*exp(theta[,i])}
+aa=list()
+j=5
+for ( i in 1:d){
+	aa[[i]]=matrix(rep(j,t),t,1)
+	j=j+5}
+nu=do.call(rbind,aa)
+aa=list()
+j=200
+for ( i in 1:d){
+	aa[[i]]=matrix(rep(j,t),t,1)
+	j=j+100}
+nuu=do.call(rbind,aa)
+y=matrix(0,D,(k))
+yr=matrix(0,D,(k))
+for (i in 1:D){
+	y[i,]=t(rmultinom(1,nu[i],c(pr[i,1],pr[i,2],a[i])))
+	yr[i,]=t(rmultinom(1,nuu[i]-nu[i],c(pr[i,1],pr[i,2],a[i])))}
+a=list()
+for ( i in 1:d){
+	a[[i]]=matrix(rep(i,t),t,1)}
+area=do.call(rbind,a)
+tiempo=rep(seq(1:t),d)
+salida=cbind(area,tiempo,nu,nuu,y,cbind(x1,x2),yr)
+return(salida)}
+
+d=simulaciones3(50,10,3)
+
+colnames(d)=c("area","time","sample","population","y1","y2","y3","x1","x2","y11","y22","y33")
+
+library(Matrix)
+datos=d
+@
+
+
+
+<<keep.source=TRUE>>=
+library(mme)
+
+
+datos=as.data.frame(datos)
+names(datos)
+datos1=subset(datos,datos$time==10)
+dat=datos1[,1:9]
+
+k=3 #number of categories of the response variable
+pp=c(1,1) #vector with the number of auxiliary variables in each category 
+mod=1 #Model 1
+#Needed matrix and initial values
+datar=data.mme(dat,k,pp,mod)
+
+#Model fit
+result=model(datar$d,datar$t,pp,datar$Xk,datar$X,datar$Z,datar$initial,
+datar$y[,1:(k-1)],datar$n,datar$N,mod)
+result
+
+#Fixed effects
+result$beta.Stddev.p.value
+
+#Random effects
+result$phi.Stddev.p.value
+
+#Direct estimators
+dir1=datos1$y11
+dir2=datos1$y22
+
+@
+
+The following code will generate Figure~\ref{direct_mod} that plots direct estimators versus model estimators.
+
+<<eval=TRUE,echo=TRUE,keep.source=TRUE>>=
+
+#Plot direct estimator versus model estimator
+dos.ver<-matrix(1:2,1,2)
+layout(dos.ver)
+plot(log(dir1),log(result$mean[,1]),main="Small area estimator Y1",
+xlab="Direct estimate", ylab="model estimate",font.main=2,cex.main=1.5,
+cex.lab=1.3)
+abline(a=0,b=1)
+plot(log(dir2),log(result$mean[,2]),main="Small area estimator Y2",
+xlab="Direct estimate", ylab="model estimate",font.main=2,cex.main=1.5,
+cex.lab=1.3)
+abline(a=0,b=1)
+
+@
+
+\begin{figure}[!ht]
+\begin{center}
+<<fig=TRUE,eval=TRUE,multifig=TRUE,echo=FALSE,width=12, height=6,keep.source=TRUE>>=
+dos.ver<-matrix(1:2,1,2)
+layout(dos.ver)
+plot(log(dir1),log(result$mean[,1]),main="Small area estimator Y1",
+xlab="Direct estimate", ylab="model estimate",font.main=2,cex.main=1.5,
+cex.lab=1.3)
+abline(a=0,b=1)
+plot(log(dir2),log(result$mean[,2]),main="Small area estimator Y2",
+xlab="Direct estimate", ylab="model estimate",font.main=2,cex.main=1.5,
+cex.lab=1.3)
+abline(a=0,b=1)
+
+@ 
+\caption{\label{direct_mod}Model estimates versus direct estimates.}
+\end{center}
+\end{figure}
+
+
+
+<<eval=TRUE,echo=TRUE,keep.source=TRUE>>=
+
+#Model estimator
+datos1$yest1=result$mean[,1]
+datos1$yest2=result$mean[,2]
+@
+
+The following code generates Figure~\ref{mod} that plots direct estimators and model estimators sorted by sample size.
+
+<<eval=TRUE,echo=TRUE,keep.source=TRUE>>=
+
+
+#Plot direct estimators and model estimators sorted by sample size
+dos.ver<-matrix(1:2,1,2)
+layout(dos.ver)
+
+a=datos1[order(datos1[,3]),]
+g_range <- range(0,45)
+plot(a$y11/1000,type="b", col="blue",axes=FALSE, ann=FALSE)
+lines(a$yest1/1000,type="b",pch=4, lty=2, col="red")
+title(xlab="Sample size")
+axis(1,at=c(1,10,20,30,40,50),lab=c(a$sample[1],a$sample[10],
+a$sample[20],a$sample[30],a$sample[40],a$sample[50]))
+axis(2, las=1, at=1*0:g_range[2])
+legend("topleft", c("Direct","Model"), cex=1, col=c("blue","red"), 
+   lty=1:2,pch=c(1,4), bty="n")
+title(main="Small area estimator Y1", font.main=1.2,cex.main=1)
+
+plot(a$y22/1000,type="b",col="blue",axes=FALSE, ann=FALSE)
+lines(a$yest2/1000,type="b",pch=4, lty=2, col="red")
+title(xlab="Sample size")
+axis(1,at=c(1,10,20,30,40,50),lab=c(a$sample[1],a$sample[10],
+a$sample[20],a$sample[30],a$sample[40],a$sample[50]))
+axis(2, las=1, at=1*0:g_range[2])
+legend("topleft", c("Direct","Model"), cex=1, col=c("blue","red"), 
+   lty=1:2,pch=c(1,4), bty="n")
+title(main="Small area estimator Y2", font.main=1.2,cex.main=1)
+@
+\begin{figure}[!ht]
+\begin{center}
+<<fig=TRUE,eval=TRUE,echo=FALSE,width=12, height=6,keep.source=TRUE>>=
+dos.ver<-matrix(1:2,1,2)
+layout(dos.ver)
+
+a=datos1[order(datos1[,3]),]
+g_range <- range(0,45)
+plot(a$y11/1000,type="b", col="blue",axes=FALSE, ann=FALSE)
+lines(a$yest1/1000,type="b",pch=4, lty=2, col="red")
+title(xlab="Sample size")
+axis(1,at=c(1,10,20,30,40,50),lab=c(a$sample[1],a$sample[10],
+a$sample[20],a$sample[30],a$sample[40],a$sample[50]))
+axis(2, las=1, at=1*0:g_range[2])
+legend("topleft", c("Direct","Model"), cex=1, col=c("blue","red"), 
+   lty=1:2,pch=c(1,4), bty="n")
+title(main="Small area estimator Y1", font.main=1.2,cex.main=1)
+
+plot(a$y22/1000,type="b",col="blue",axes=FALSE, ann=FALSE)
+lines(a$yest2/1000,type="b",pch=4, lty=2, col="red")
+title(xlab="Sample size")
+axis(1,at=c(1,10,20,30,40,50),lab=c(a$sample[1],a$sample[10],
+a$sample[20],a$sample[30],a$sample[40],a$sample[50]))
+axis(2, las=1, at=1*0:g_range[2])
+legend("topleft", c("Direct","Model"), cex=1, col=c("blue","red"), 
+   lty=1:2,pch=c(1,4), bty="n")
+title(main="Small area estimator Y2", font.main=1.2,cex.main=1)
+@ 
+\caption{\label{mod}Model estimator and direct estimator sorted by 
+sample size.}
+\end{center}
+\end{figure}
+The following code calculates the parametric bootstrap BIAS and MSE for the model-based estimators.
+<<eval=TRUE,echo=TRUE,keep.source=TRUE>>=
+##Bootstrap parametric BIAS and MSE
+
+B=10    #Bootstrap iterations
+ss=12345 #SEED
+set.seed(ss)
+
+mse.pboot=mseb(pp,datar$Xk,datar$X,datar$Z,datar$n,datar$N,result,B,mod)
+
+cv=mse.pboot[[3]]
+
+@
+The following code generates Figure~\ref{cv} that plots the root mean squared error (RMSE) of the model-based estimates.
+
+<<eval=TRUE,echo=TRUE,keep.source=TRUE>>=
+dos.ver<-matrix(1:2,1,2)
+layout(dos.ver)
+g_range <- range(0,45)
+plot(cv[,1],type="b", col="blue",axes=FALSE, ann=FALSE)
+title(xlab="Sample size")
+axis(1,at=c(1,10,20,30,40,50),lab=c(a$sample[1],a$sample[10],
+a$sample[20],a$sample[30],a$sample[40],a$sample[50]))
+axis(2, las=1, at=10*0:g_range[2])
+title(main="RMSE for the estimator of Y1", font.main=1.2,cex.main=1)
+
+g_range <- range(0,45)
+plot(cv[,2],type="b",col="blue",axes=FALSE, ann=FALSE)
+title(xlab="Sample size")
+axis(1,at=c(1,10,20,30,40,50),lab=c(a$sample[1],a$sample[10],
+a$sample[20],a$sample[30],a$sample[40],a$sample[50]))
+axis(2, las=1, at=10*0:g_range[2])
+title(main="RMSE for the estimator of Y2", font.main=1.2,cex.main=1)
+
+@
+
+\begin{figure}[!ht]
+\begin{center}
+<<fig=TRUE,eval=TRUE,echo=FALSE,width=12, height=6, keep.source=TRUE>>=
+dos.ver<-matrix(1:2,1,2)
+layout(dos.ver)
+g_range <- range(0,45)
+plot(cv[,1],type="b", col="blue",axes=FALSE, ann=FALSE)
+title(xlab="Sample size")
+axis(1,at=c(1,10,20,30,40,50),lab=c(a$sample[1],a$sample[10],
+a$sample[20],a$sample[30],a$sample[40],a$sample[50]))
+axis(2, las=1, at=10*0:g_range[2])
+title(main="RMSE for the estimator of Y1", font.main=1.2,cex.main=1)
+
+g_range <- range(0,45)
+plot(cv[,2],type="b",col="blue",axes=FALSE, ann=FALSE)
+title(xlab="Sample size")
+axis(1,at=c(1,10,20,30,40,50),lab=c(a$sample[1],a$sample[10],
+a$sample[20],a$sample[30],a$sample[40],a$sample[50]))
+axis(2, las=1, at=10*0:g_range[2])
+title(main="RMSE for the estimator of Y2", font.main=1.2,cex.main=1)
+@
+\caption{\label{cv}RMSE of model-based estimates}
+\end{center}
+\end{figure}
+
+@  
+
+\bibliography{bieb_vignete}
+\end{document}
+
+
+
+

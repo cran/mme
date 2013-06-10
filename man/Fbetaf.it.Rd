@@ -1,0 +1,93 @@
+\name{Fbetaf.it}
+\alias{Fbetaf.it}
+\title{The inverse of the Fisher information matrix of the fixed and random effects for Model 2}
+\usage{
+  Fbetaf.it(sigmap, X, Z, phi1, phi2, y, mu, u1, u2)
+}
+\arguments{
+  \item{sigmap}{a list with the model variance-covariance
+  matrices for each domain.}
+
+  \item{X}{list of matrices with the auxiliary variables
+  obtained from \code{\link[mme]{data.mme}}. The dimension
+  of the list is the number of categories of the response
+  variable minus one.}
+
+  \item{Z}{design matrix of random effects obtained from
+  \code{\link[mme]{data.mme}}.}
+
+  \item{phi1}{vector with the first variance component
+  obtained from \code{\link[mme]{modelfit2}}.}
+
+  \item{phi2}{vector with the second variance component
+  obtained from \code{\link[mme]{modelfit2}}.}
+
+  \item{y}{matrix with the response variable, except the
+  reference category obtained from
+  \code{\link[mme]{data.mme}}. The rows are the domains and
+  the columns are the categories of the response variable
+  minus one.}
+
+  \item{mu}{matrix with the estimated mean of the response
+  variable obtained from \code{\link[mme]{prmu.time}}.}
+
+  \item{u1}{matrix with the values of the first random
+  effect obtained from \code{\link[mme]{modelfit2}}.}
+
+  \item{u2}{matrix with the values of the second random
+  effect obtained from \code{\link[mme]{modelfit2}}.}
+}
+\value{
+  A list containing the following components. \item{F}{the
+  inverse of the Fisher information matrix.}
+  \item{S}{(beta, u1, u2) scores}
+}
+\description{
+  This function calculates the score vector S and the
+  inverse of the Fisher information matrix for the fixed
+  (beta) and the random effects (u1, u2) in Model 2. This
+  model has two independet sets of random effects. The
+  first one contains independent random effects u1dk
+  associated to each category and domain. The second set
+  contains random effects u2dkt associated to each
+  category, domain and time period. Model 2 assumes that
+  the u2dk are independent across time.
+  \code{\link[mme]{modelfit2}} uses the output of this
+  function to estimate the fixed and random effect by the
+  PQL method.
+}
+\examples{
+require(Matrix)
+
+k=3 #number of categories of the response variable
+pp=c(1,1) #vector with the number of auxiliary variables in each category
+mod=2  #Type of model
+data(simdata2) #data
+datar=data.mme(simdata2,k,pp,mod)
+initial=datar$initial
+mean=prmu.time(datar$n,datar$Xk,initial$beta.0,initial$u1.0,initial$u2.0)
+sigmap=wmatrix(datar$n,mean$estimated.probabilities)
+
+##The inverse of the Fisher information matrix of the fixed effects
+Fisher=Fbetaf.it(sigmap,datar$X,datar$Z,initial$phi1.0,initial$phi2.0,
+       datar$y[,1:(k-1)],mean$mean,initial$u1.0,initial$u2.0)
+}
+\references{
+  Lopez-Vizcaino, ME, Lombardia, MJ and Morales, D (2013).
+  Small area estimation of labour force indicator under a
+  multinomial mixed model with correlated time and area
+  effects. Submitted for review.
+}
+\seealso{
+  \code{\link[mme]{data.mme}},
+  \code{\link[mme]{initial.values}},
+  \code{\link[mme]{wmatrix}},
+  \code{\link[mme]{phi.mult.it}},
+  \code{\link[mme]{prmu.time}},
+  \code{\link[mme]{phi.direct.it}},
+  \code{\link[mme]{sPhikf.it}}, \code{\link[mme]{ci}},
+  \code{\link[mme]{modelfit2}}, \code{\link[mme]{msef.it}},
+  \code{\link[mme]{mseb}}.
+}
+\keyword{models}
+

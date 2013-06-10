@@ -1,0 +1,34 @@
+\name{print.mme}
+\alias{print.mme}
+\title{Print objects of class mme}
+\usage{
+  \method{print}{mme} (x, ...)
+}
+\arguments{
+  \item{x}{a list with the output of
+  \code{\link[mme]{modelfit1}},
+  \code{\link[mme]{modelfit2}} or
+  \code{\link[mme]{modelfit3}}.}
+
+  \item{...}{further information.}
+}
+\description{
+  This function prints objects of class mme.
+}
+\examples{
+k=3 #number of categories of the response variable
+pp=c(1,1) #vector with the number of auxiliary variables in each category
+mod=1  # Type of model
+data(simdata)
+datar=data.mme(simdata,k,pp,mod)
+##Model fit
+result=modelfit1(pp,datar$Xk,datar$X,datar$Z,datar$initial,datar$y[,1:(k-1)],datar$n,datar$N)
+result
+}
+\seealso{
+  \code{\link[mme]{modelfit1}},
+  \code{\link[mme]{modelfit2}},
+  \code{\link[mme]{modelfit3}}
+}
+\keyword{class}
+

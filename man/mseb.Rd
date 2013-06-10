@@ -1,0 +1,126 @@
+\name{mseb}
+\alias{mseb}
+\title{Bias and MSE using parametric bootstrap}
+\usage{
+  mseb(pp, Xk, X, Z, M, MM, resul, B, mod)
+}
+\arguments{
+  \item{pp}{vector with the number of the auxiliary
+  variables per category.}
+
+  \item{Xk}{list of matrices with the auxiliary variables
+  per category obtained from \code{\link[mme]{data.mme}}.
+  The dimension of the list is the number of domains.}
+
+  \item{X}{list of matrices with the auxiliary variables
+  obtained from \code{\link[mme]{data.mme}}. The dimension
+  of the list is the number of categories of the response
+  variable minus one.}
+
+  \item{Z}{design matrix of random effects obtained from
+  \code{\link[mme]{data.mme}}.}
+
+  \item{M}{vector with the area sample sizes.}
+
+  \item{MM}{vector with the population sample sizes.}
+
+  \item{resul}{output of the function
+  \code{\link[mme]{modelfit1}},
+  \code{\link[mme]{modelfit2}} or
+  \code{\link[mme]{modelfit3}}.}
+
+  \item{B}{number of bootstrap replications.}
+
+  \item{mod}{a number specifying the type of models:
+  1=multinomial mixed model with one independent random
+  effect in each category of the response variable (Model
+  1), 2=multinomial mixed model with two independent random
+  effects in each category of the response variable: one
+  domain random effect and another independent time and
+  domain random effect (Model 2) and 3= multinomial model
+  with two independent random effects in each category of
+  the response variable: one domain random effect and
+  another correlated time and domain random effect (Model
+  3).}
+}
+\value{
+  a list containing the following components.
+  \item{bias.pboot}{BIAS of the parametric bootstrap
+  estimator of the mean of the response variable}
+  \item{mse.pboot}{MSE of the parametric bootstrap
+  estimator of the mean of the response variable}
+  \item{rmse.pboot}{RMSE of the parametric bootstrap
+  estimator of the mean of the response variable}
+}
+\description{
+  This function calculates the bias and the mse for the
+  multinomial mixed effects models using parametric
+  bootstrap. Three types of multinomial mixed models are
+  considered, with one independent domain random effect in
+  each category of the response variable (Model 1), with
+  two random effects: the first, with a domain random
+  effect and with independent time and domain random effect
+  (Model 2) and the second, with a domain random effect and
+  with correlated time and domain random effect (Model 3).
+  See details of the parametric bootstrap procedure in
+  Gonzalez-Manteiga et al. (2008) and in Lopez-Vizcaino et
+  al. (2013) for the adaptation to these three models. This
+  function uses the output of \code{\link[mme]{modelfit1}},
+  \code{\link[mme]{modelfit2}} or
+  \code{\link[mme]{modelfit3}}, depending of the current
+  multinomial mixed model.
+}
+\examples{
+require(Matrix)
+
+k=3 #number of categories of the response variable
+pp=c(1,1) #vector with the number of auxiliary variables in each category
+data(simdata)
+mod=1  # Type of model
+datar=data.mme(simdata,k,pp,mod)
+##Model fit
+result=modelfit1(pp,datar$Xk,datar$X,datar$Z,datar$initial,datar$y[,1:(k-1)],datar$n,datar$N)
+
+B=1    #Bootstrap iterations
+ss=12345 #SEED
+set.seed(ss)
+
+##Bootstrap parametric BIAS and MSE
+mse.pboot=mseb(pp,datar$Xk,datar$X,datar$Z,datar$n,datar$N,result,B,mod)
+}
+\references{
+  Lopez-Vizcaino, ME, Lombardia, MJ and Morales, D (2013).
+  Multinomial-based small area estimation of labour force
+  indicators. Statistical Modelling, 13 ,153-178.
+
+  Lopez-Vizcaino, ME, Lombardia, MJ and Morales, D (2013).
+  Small area estimation of labour force indicator under a
+  multinomial mixed model with correlated time and area
+  effects. Submitted for review.
+
+  Gonzalez-Manteiga, W, Lombardia, MJ, Molina, I, Morales,
+  D, Santamaria, L (2008). Estimation of the mean squared
+  error of predictors of small area linear parameters under
+  a logistic mixed model, Computational Statistics and Data
+  Analysis, 51, 2720-2733.
+}
+\seealso{
+  \code{\link[mme]{data.mme}},
+  \code{\link[mme]{initial.values}},
+  \code{\link[mme]{wmatrix}}, \code{\link[mme]{phi.mult}},
+  \code{\link[mme]{phi.mult.it}},
+  \code{\link[mme]{phi.mult.ct}}, \code{\link[mme]{prmu}},
+  \code{\link[mme]{prmu.time}},
+  \code{\link[mme]{phi.direct}},
+  \code{\link[mme]{phi.direct.it}},
+  \code{\link[mme]{phi.direct.ct}},
+  \code{\link[mme]{sPhikf}}, \code{\link[mme]{sPhikf.it}},
+  \code{\link[mme]{sPhikf.ct}},
+  \code{\link[mme]{modelfit1}},
+  \code{\link[mme]{modelfit2}},
+  \code{\link[mme]{modelfit3}}, \code{\link[mme]{omega}},
+  \code{\link[mme]{Fbetaf}}, \code{\link[mme]{Fbetaf.it}},
+  \code{\link[mme]{Fbetaf.ct}}, \code{\link[mme]{ci}}.
+}
+\keyword{models}
+

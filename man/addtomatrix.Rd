@@ -1,0 +1,38 @@
+\name{addtomatrix}
+\alias{addtomatrix}
+\title{Add rows from a matrix}
+\usage{
+  addtomatrix(C2, d, t, k)
+}
+\arguments{
+  \item{C2}{a matrix of dimension d*t*(k-1) times d*(k-1).}
+
+  \item{d}{number of areas.}
+
+  \item{t}{number of time periods.}
+
+  \item{k}{number of categories of the response variable.}
+}
+\value{
+  C22 a matrix of dimension d*(k-1) times d*(k-1).
+}
+\description{
+  This function adds rows from a matrix of dimension
+  d*t*(k-1) times d*(k-1).
+}
+\examples{
+k=3 #number of categories of the response variable
+d=15 # number of areas
+t=2  # number of time periods
+mat=matrix(1,d*t*(k-1),d*(k-1)) # a matrix
+
+##Add items in the matrix
+mat2=addtomatrix(mat,d,t,k)
+}
+\seealso{
+  \code{\link[mme]{Fbetaf.it}},
+  \code{\link[mme]{Fbetaf.ct}},
+  \code{\link[mme]{modelfit2}},\code{\link[mme]{modelfit3}}
+}
+\keyword{models}
+

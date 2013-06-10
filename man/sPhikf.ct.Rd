@@ -1,0 +1,100 @@
+\name{sPhikf.ct}
+\alias{sPhikf.ct}
+\title{Fisher information matrix and score vectors of the variance components for Model 3}
+\usage{
+  sPhikf.ct(d, t, pp, sigmap, X, eta, phi1, phi2, rho, pr,
+    M)
+}
+\arguments{
+  \item{d}{number of areas.}
+
+  \item{t}{number of time periods.}
+
+  \item{pp}{vector with the number of the auxiliary
+  variables per category.}
+
+  \item{sigmap}{a list with the model variance-covariance
+  matrices for each domain obtained from
+  \code{\link[mme]{wmatrix}}.}
+
+  \item{X}{list of matrices with the auxiliary variables
+  obtained from \code{\link[mme]{data.mme}}. The dimension
+  of the list is the number of categories of the response
+  variable minus one.}
+
+  \item{eta}{matrix with the estimated log-rates of
+  probabilites of each category over the reference category
+  obtained from \code{\link[mme]{prmu.time}}.}
+
+  \item{phi1}{vector with the values of the first variance
+  component obtained from \code{\link[mme]{modelfit3}}.}
+
+  \item{phi2}{vector with the values of the second variance
+  component obtained from \code{\link[mme]{modelfit3}}.}
+
+  \item{rho}{vector with the correlation parameter obtained
+  from \code{\link[mme]{modelfit3}}.}
+
+  \item{pr}{matrix with the estimated probabilities of the
+  response variable obtained from
+  \code{\link[mme]{prmu.time}}.}
+
+  \item{M}{vector with the area sample sizes.}
+}
+\value{
+  A list containing the following components.
+  \item{S}{(phi1, phi2, rho) score vector.} \item{F}{Fisher
+  information matrix of the variance components (phi1,
+  phi2, rho).}
+}
+\description{
+  This function computes the Fisher information matrix and
+  the score vectors of the variance components, for the
+  multinomial mixed model with two independent random
+  effects for each category of the response variable: one
+  domain random effect and another correlated time and
+  domain random effect (Model 3). These values are used in
+  the fitting algorithm implemented in
+  \code{\link[mme]{modelfit3}} to estimate the random
+  effects. The algorithm adatps the ideas of Schall (1991)
+  to a multivariate model. The variance components are
+  estimated by the REML method.
+}
+\examples{
+require(Matrix)
+
+k=3 #number of categories of the response variable
+pp=c(1,1) #vector with the number of auxiliary variables in each category
+mod=3 #type of model
+data(simdata3) #data
+datar=data.mme(simdata3,k,pp, mod)
+initial=datar$initial
+mean=prmu.time(datar$n,datar$Xk,initial$beta.0,initial$u1.0,initial$u2.0)
+sigmap=wmatrix(datar$n,mean$estimated.probabilities)
+
+## Fisher information matrix and the score vectors
+Fisher.phi.ct=sPhikf.ct(datar$d,datar$t,pp,sigmap,datar$X,mean$eta,initial$phi1.0,
+           initial$phi2.0,initial$rho.0,mean$estimated.probabilities,datar$n)
+}
+\references{
+  Lopez-Vizcaino, ME, Lombardia, MJ and Morales, D (2013).
+  Small area estimation of labour force indicators under a
+  multinomial mixed model with correlated time and area
+  effects. Submitted for review.
+
+  Schall, R (1991). Estimation in generalized linear models
+  with random effects. Biometrika, 78,719-727.
+}
+\seealso{
+  \code{\link[mme]{data.mme}},
+  \code{\link[mme]{initial.values}},
+  \code{\link[mme]{wmatrix}},
+  \code{\link[mme]{phi.mult.ct}},
+  \code{\link[mme]{prmu.time}},
+  \code{\link[mme]{phi.direct.ct}},
+  \code{\link[mme]{Fbetaf.ct}}, \code{\link[mme]{omega}},
+  \code{\link[mme]{ci}}, \code{\link[mme]{modelfit3}},
+  \code{\link[mme]{msef.ct}}, \code{\link[mme]{mseb}}
+}
+\keyword{models}
+
