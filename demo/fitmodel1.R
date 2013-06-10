@@ -29,7 +29,6 @@ u1[,1]=rnorm(d,mean=0,sd=sqrt(phi1[1]))
 u1[,2]=rnorm(d,mean=0,sd=sqrt(phi1[2]))
 
 u2=matrix(0,D,k-1)
-library(MASS)
 rho=c(0.50,0.75)
 a=omega(t,k,rho,phi2)
 ceros=matrix(rep(0,t),t,1)

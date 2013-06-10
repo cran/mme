@@ -129,7 +129,6 @@ return(result)
 #' Multinomial-based small area estimation of labour force indicators.
 #' Statistical Modelling,13,153-178.
 #' @examples
-#' require(Matrix)
 #'
 #' k=3 #number of categories of the response variable
 #' pp=c(1,1) #vector with the number of auxiliary variables in each category
@@ -173,7 +172,6 @@ wmatrix<-function(M,pr){
 #' Multinomial-based small area estimation of labour force indicators.
 #' Statistical Modelling, 13, 153-178.
 #' @examples
-#' library(Matrix)
 #'
 #' k=3 #number of categories of the response variable
 #' pp=c(1,1) #vector with the number of auxiliary variables in each category
@@ -319,7 +317,6 @@ rm(C2)
 #' squared error of predictors of small area linear parameters under a logistic mixed model, Computational Statistics
 #' and Data Analysis, 51, 2720-2733.
 #' @examples
-#' require(Matrix)
 #'
 #' k=3 #number of categories of the response variable
 #' pp=c(1,1) #vector with the number of auxiliary variables in each category
@@ -338,183 +335,173 @@ rm(C2)
 
 
 
-mseb<-function(pp,Xk,X,Z,M,MM,resul,B,mod){
-beta.new2=matrix(resul[[8]][,1],length(resul[[8]][,1]),1)
-D=length(M)
-k=ncol(resul$mean)+1
-if (mod==1){
-phi.new=matrix(resul[[9]][,1],length(resul[[9]][,1]),1)
-phiasterisco=phi.new
-uasterisco=matrix(0,D,(k-1))}
-if (mod==2 | mod==3){
-d=nrow(resul$u1)
-t=D/d
-phi1.new=as.matrix(resul[[9]][1:(k-1),1])
-phi2.new=as.matrix(resul[[9]][k:(2*k-2),1])
-phiasterisco1=phi1.new
-phiasterisco2=phi2.new
-uasterisco1=matrix(0,d,(k-1))
-uasterisco2=matrix(0,D,(k-1))
-}
-if (mod==3){
-rho.new=resul$rho
-rhoasterisco=rho.new
-ceros=matrix(rep(0,t),t,1)}
-yasterisco=matrix(0,D,k)
-yasteriscor=matrix(0,D,k)
-ppp1=list()
-for (i in 1:D){
-ppp1[[i]]=matrix(0,(k-1),(k-1))
-}
-
-sesgo=matrix(0,D,(k-1))
-suma=matrix(0,D,(k-1))
-media=matrix(0,D,(k-1))
-mse.bootstrap=matrix(0,D,(k-1))
-mse1=list()
-mse2=list()
-ps=cumsum(pp+1)
-beta.new=list()
-beta.new[[1]]=matrix(beta.new2[1:ps[1],],(pp[1]+1),1)
-for (i in 2:(k-1)){
-beta.new[[i]]=matrix(beta.new2[(ps[i-1]+1):ps[i],],(pp[i]+1),1)}
-betaasterisco=beta.new
-it=1
-j=1
-valido=0
-
-while (j<(B+1)){
-	for (l in 1:(k-1)){
-	if (mod==1) {uasterisco[,l]=rnorm(D,mean=0,sd=phiasterisco[l]^(1/2))}
-	if (mod==2) {
-      uasterisco1[,l]=rnorm(d,mean=0,sd=phiasterisco1[l]^(1/2))
-      uasterisco2[,l]=rnorm(D,mean=0,sd=phiasterisco2[l]^(1/2))}
-   if (mod==3){
-   a=omega(t,k,rhoasterisco,phiasterisco2)
-   uasterisco1[,l]=rnorm(d,mean=0,sd=phiasterisco1[l]^(1/2))
-	 datos=mvrnorm(d,ceros,((phiasterisco2[l])*(a[[1]][[l]])))
-	 uasterisco2[,l]=matrix(t(datos),D,1) }
+mseb=function (pp, Xk, X, Z, M, MM, resul, B, mod) 
+{
+    beta.new2 = matrix(resul[[8]][, 1], length(resul[[8]][, 1]), 
+        1)
+    D = length(M)
+    k = ncol(resul$mean) + 1 
+       if (mod == 1) {
+        phi.new = matrix(resul[[9]][, 1], length(resul[[9]][, 
+            1]), 1)
+        phiasterisco = phi.new
+        uasterisco = matrix(0, D, (k - 1))
+    }
+    if (mod == 2 | mod == 3) {
+        d = nrow(resul$u1)
+        t = D/d
+        phi1.new = as.matrix(resul[[9]][1:(k - 1), 1])
+        phi2.new = as.matrix(resul[[9]][k:(2 * k - 2), 1])
+        phiasterisco1 = phi1.new
+        phiasterisco2 = phi2.new
+        uasterisco1 = matrix(0, d, (k - 1))
+        uasterisco2 = matrix(0, D, (k - 1))
+    }
+    if (mod == 3) {
+        rho.new = resul$rho
+        rhoasterisco = rho.new
+        ceros = matrix(rep(0, t), t, 1)
+    }
+    yasterisco = matrix(0, D, k)
+    yasteriscor = matrix(0, D, k)
+    ppp1 = list()
+    for (i in 1:D) {
+        ppp1[[i]] = matrix(0, (k - 1), (k - 1))
+    }
+    sesgo = matrix(0, D, (k - 1))
+    suma = matrix(0, D, (k - 1))
+    media = matrix(0, D, (k - 1))
+    mse.bootstrap = matrix(0, D, (k - 1))
+    mse1 = list()
+    mse2 = list()
+    ps = cumsum(pp + 1)
+    beta.new = list()
+    beta.new[[1]] = matrix(beta.new2[1:ps[1], ], (pp[1] + 1), 
+        1)
+    for (i in 2:(k - 1)) {
+        beta.new[[i]] = matrix(beta.new2[(ps[i - 1] + 1):ps[i], 
+            ], (pp[i] + 1), 1)
+    }
+    betaasterisco = beta.new
+    it = 1
+    j = 1
+    valido = 0
+    while (j < (B + 1)) {
+    	      for (l in 1:(k - 1)) {
+        	
+            if (mod == 1) {
+                uasterisco[, l] = rnorm(D, mean = 0, sd = phiasterisco[l]^(1/2))
             }
-	if (mod==1) {prmul=prmu(M,Xk,betaasterisco,uasterisco)}
-	if (mod==2 | mod==3) {prmul=prmu.time(M,Xk,betaasterisco,uasterisco1,uasterisco2)}
-	theta=prmul[[3]]
-	pr=prmul[[1]]
-	mu=prmul[[2]]
-	for (i in 1:D){
-		yasterisco[i,]=t(rmultinom(1,M[i],pr[i,]))
-		yasteriscor[i,]=t(rmultinom(1,MM[i]-M[i],pr[i,]))
-	}
-	yast=yasterisco[,1:(k-1)]
-	yastt=yasterisco[,1:(k-1)]+yasteriscor[,1:(k-1)]
-	if (mod==1) {
-	u.newi=matrix(rep(0.5,((k-1)*D)),D,(k-1))
-	initial=list(beta.new,as.vector(phi.new),u.newi)
-	par=modelfit1(pp,Xk,X,Z,initial,yast,M,MM) }
-	if (mod==2) {
-	u1.new=rep(0.01,((k-1)*d))
-	dim(u1.new)=c(d,k-1)
-	u2.new=rep(0.01,((k-1)*D))
-	dim(u2.new)=c(D,k-1)
-	initial=list(beta.new,as.vector(phi1.new),as.vector(phi2.new),u1.new,u2.new)
-	par=modelfit2(d,t,pp,Xk,X,Z,initial,yast,M,MM) }
-	if (mod==3){
-	u1.new=rep(0.01,((k-1)*d))
-	dim(u1.new)=c(d,k-1)
-	u2.new=rep(0.01,((k-1)*D))
-	dim(u2.new)=c(D,k-1)
-	initials=list(beta.new,as.vector(phi1.new),as.vector(phi2.new),u1.new,u2.new,as.vector(rho.new))
-	par=modelfit3(d,t,pp,Xk,X,Z,initials,yast,M,MM,1) }
-	valido=par$warning1
-	if (valido==1){
-
-		for (l in 1:(k-1)){
-	if (mod==1) {uasterisco[,l]=rnorm(D,mean=0,sd=phi.new[l]^(1/2))}
-	if (mod==2) {
-      uasterisco1[,l]=rnorm(d,mean=0,sd=phi1.new[l]^(1/2))
-      uasterisco2[,l]=rnorm(D,mean=0,sd=phi2.new[l]^(1/2))}
-   	if (mod==3){
-  	 a=omega(t,k,rho.new,phi2.new)
-  	 uasterisco1[,l]=rnorm(d,mean=0,sd=phi1.new[l]^(1/2))
-	 datos=mvrnorm(d,ceros,((phi2.new[l])*(a[[1]][[l]])))
-	 uasterisco2[,l]=matrix(t(datos),D,1) }
+            if (mod == 2) {
+                uasterisco1[, l] = rnorm(d, mean = 0, sd = phiasterisco1[l]^(1/2))
+                uasterisco2[, l] = rnorm(D, mean = 0, sd = phiasterisco2[l]^(1/2))
             }
-	if (mod==1) {prmul=prmu(M,Xk,beta.new,uasterisco)}
-	if (mod==2 | mod==3) {prmul=prmu.time(M,Xk,beta.new,uasterisco1,uasterisco2)}
-	theta=prmul[[3]]
-	pr=prmul[[1]]
-	mu=prmul[[2]]
-	for (i in 1:D){
-		yasterisco[i,]=t(rmultinom(1,M[i],pr[i,]))
-		yasteriscor[i,]=t(rmultinom(1,MM[i]-M[i],pr[i,]))
-	}
-	yast=yasterisco[,1:(k-1)]
-	yastt=yasterisco[,1:(k-1)]+yasteriscor[,1:(k-1)]
-	if (mod==1) {
-	u.newi=matrix(rep(0.5,((k-1)*D)),D,(k-1))
-	initial=list(beta.new,as.vector(phi.new),u.newi)
-	par=modelfit1(pp,Xk,X,Z,initial,yast,M,MM) }
-	if (mod==2) {
-	u1.new=rep(0.01,((k-1)*d))
-	dim(u1.new)=c(d,k-1)
-	u2.new=rep(0.01,((k-1)*D))
-	dim(u2.new)=c(D,k-1)
-	initial=list(beta.new,as.vector(phi1.new),as.vector(phi2.new),u1.new,u2.new)
-	par=modelfit2(d,t,pp,Xk,X,Z,initial,yast,M,MM) }
-	if (mod==3){
-	u1.new=rep(0.01,((k-1)*d))
-	dim(u1.new)=c(d,k-1)
-	u2.new=rep(0.01,((k-1)*D))
-	dim(u2.new)=c(D,k-1)
-	initials=list(beta.new,as.vector(phi1.new),as.vector(phi2.new),u1.new,u2.new,as.vector(rho.new))
-	par=modelfit3(d,t,pp,Xk,X,Z,initials,yast,M,MM,1) }
-	valido=par$warning1
-	}
-	
-	
-	if (valido==0 ){
-		betaasterisco2=matrix(par[[8]][,1],length(par[[8]][,1]),1)
-		if (mod==1) {phiasterisco2=matrix(par[[9]][,1], length(par[[9]][,1]),1)}
-		if (mod==2 | mod==3) {
-		  phiasterisco12=par[[9]][1:(k-1),1]
-		  phiasterisco22=par[[9]][k:(2*k-2),1]}
-		 if (mod==3){
-		 rhoasterisco2=par$rho}
-		 muasterisco=par$mean
-		prasterisco=par$Estimated.probabilities
-		for (i in 1:D){
-		ppp1[[i]]=ppp1[[i]]+(yastt[i,]-muasterisco[i,])%*%t(yastt[i,]-muasterisco[i,])
-		sesgo[i,]=sesgo[i,]+(yastt[i,]-muasterisco[i,])
-		suma[i,]=suma[i,]+muasterisco[i,]}
-		if (mod==1) {phiasterisco=phiasterisco2}
-		if (mod==2 | mod==3) {
-		  phiasterisco1=phiasterisco12
-		  phiasterisco2=phiasterisco22}
-		 if (mod==3){
-     		rhoasterisco=rhoasterisco2}
-		ps=cumsum(pp+1)
-		betaasterisco=list()
-		betaasterisco[[1]]=matrix(betaasterisco2[1:ps[1],],(pp[1]+1),1)
-		for (i in 2:(k-1)){
-		betaasterisco[[i]]=matrix(betaasterisco2[(ps[i-1]+1):ps[i],],(pp[i]+1),1)}
-		it=it+1
-		}
-		if (j==B) {if (it<B) {j=j-(B-it)-1}}
-		j=j+1
-	}
-for (i in 1:D){
-	mse1[[i]]=ppp1[[i]]/it
-	sesgo[i,]=sesgo[i,]/it
-	media[i,]=suma[i,]/it}
-for (j in 1:D){
-	mse.bootstrap[j,]=diag(mse1[[j]])
-	}
-rmse.bootstrap=sqrt(mse.bootstrap)/media*100
-colnames(mse.bootstrap)=paste("mse.pboot.",1:(k-1),sep="")
-colnames(sesgo)=paste("bias.pboot.",1:(k-1),sep="")
-colnames(rmse.bootstrap)=paste("rmse.pboot.",1:(k-1),sep="")
-bootstrap=list(bias.pboot = sesgo, mse.pboot = mse.bootstrap,rmse.pboot=rmse.bootstrap)
-return(bootstrap)
+            if (mod == 3) {
+                a = omega(t, k, rhoasterisco, phiasterisco2)
+                uasterisco1[, l] = rnorm(d, mean = 0, sd = phiasterisco1[l]^(1/2))
+                datos = mvrnorm(d, ceros, ((phiasterisco2[l]) * 
+                  (a[[1]][[l]])))
+                uasterisco2[, l] = matrix(t(datos), D, 1)
+            }
+        }
+        if (mod == 1 ) {
+            prmul = prmu(M, Xk, betaasterisco, uasterisco)
+        }
+        if (mod == 2 | mod == 3) {
+            prmul = prmu.time(M, Xk, betaasterisco, uasterisco1, 
+                uasterisco2)
+        }
+        theta = prmul[[3]]
+        pr = prmul[[1]]
+        mu = prmul[[2]]
+        for (i in 1:D) {
+            yasterisco[i, ] = t(rmultinom(1, M[i], pr[i, ]))
+            yasteriscor[i, ] = t(rmultinom(1, MM[i] - M[i], pr[i, 
+                ]))
+        }
+        yast = yasterisco[, 1:(k - 1)]
+        yastt = yasterisco[, 1:(k - 1)] + yasteriscor[, 1:(k - 
+            1)]
+        if (mod == 1) {
+            u.newi = matrix(rep(0.5, ((k - 1) * D)), D, (k - 
+                1))
+            initial = list(beta.new, as.vector(phi.new), u.newi)
+            par = modelfit1(pp, Xk, X, Z, initial, yast, M, MM)
+        }
+        if (mod == 2) {
+            u1.new = rep(0.01, ((k - 1) * d))
+            dim(u1.new) = c(d, k - 1)
+            u2.new = rep(0.01, ((k - 1) * D))
+            dim(u2.new) = c(D, k - 1)
+            initial = list(beta.new, as.vector(phi1.new), as.vector(phi2.new), 
+                u1.new, u2.new)
+            par = modelfit2(d, t, pp, Xk, X, Z, initial, yast, 
+                M, MM)
+        }
+        if (mod == 3) {
+            u1.new = rep(0.01, ((k - 1) * d))
+            dim(u1.new) = c(d, k - 1)
+            u2.new = rep(0.01, ((k - 1) * D))
+            dim(u2.new) = c(D, k - 1)
+            initials = list(beta.new, as.vector(phi1.new), as.vector(phi2.new), 
+                u1.new, u2.new, as.vector(rho.new))
+            par = modelfit3(d, t, pp, Xk, X, Z, initials, yast, 
+                M, MM, 1)
+        }
+        valido = par$warning1
+       
+        if (valido == 0) {
+            betaasterisco2 = matrix(par[[8]][, 1], length(par[[8]][, 
+                1]), 1)
+            if (mod == 1) {
+                phiasterisco2 = matrix(par[[9]][, 1], length(par[[9]][, 
+                  1]), 1)
+            }
+            if (mod == 2 | mod == 3) {
+                phiasterisco12 = par[[9]][1:(k - 1), 1]
+                phiasterisco22 = par[[9]][k:(2 * k - 2), 1]
+            }
+            if (mod == 3) {
+                rhoasterisco2 = par$rho
+            }
+            muasterisco = par$mean
+            prasterisco = par$Estimated.probabilities
+            for (i in 1:D) {
+                ppp1[[i]] = ppp1[[i]] + (yastt[i, ] - muasterisco[i, 
+                  ]) %*% t(yastt[i, ] - muasterisco[i, ])
+                sesgo[i, ] = sesgo[i, ] + (yastt[i, ] - muasterisco[i, 
+                  ])
+                suma[i, ] = suma[i, ] + muasterisco[i, ]
+            }
+
+            it = it + 1
+        }
+        if (j == B) {
+            if (it < B) {
+                j = j - (B - it) - 1
+            }
+        }
+        j = j + 1
+    }
+    for (i in 1:D) {
+        mse1[[i]] = ppp1[[i]]/it
+        sesgo[i, ] = sesgo[i, ]/it
+        media[i, ] = suma[i, ]/it
+    }
+    for (j in 1:D) {
+        mse.bootstrap[j, ] = diag(mse1[[j]])
+    }
+    rmse.bootstrap = sqrt(mse.bootstrap)/media * 100
+    colnames(mse.bootstrap) = paste("mse.pboot.", 1:(k - 1), 
+        sep = "")
+    colnames(sesgo) = paste("bias.pboot.", 1:(k - 1), sep = "")
+    colnames(rmse.bootstrap) = paste("rmse.pboot.", 1:(k - 1), 
+        sep = "")
+    bootstrap = list(bias.pboot = sesgo, mse.pboot = mse.bootstrap, 
+        rmse.pboot = rmse.bootstrap)
+    return(bootstrap)
 }
+
 
 ####################################################################
 #' Choose between the three models

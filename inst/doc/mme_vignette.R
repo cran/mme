@@ -9,7 +9,7 @@ options(prompt = "R> ", np.messages = FALSE, digits = 3)
 
 
 ###################################################
-### code chunk number 2: mme_vignette.Rnw:327-414
+### code chunk number 2: mme_vignette.Rnw:327-413
 ###################################################
 
 simulaciones3<-function(d,t,k){
@@ -96,12 +96,11 @@ d=simulaciones3(50,10,3)
 
 colnames(d)=c("area","time","sample","population","y1","y2","y3","x1","x2","y11","y22","y33")
 
-library(Matrix)
 datos=d
 
 
 ###################################################
-### code chunk number 3: mme_vignette.Rnw:419-448
+### code chunk number 3: mme_vignette.Rnw:418-447
 ###################################################
 library(mme)
 
@@ -135,7 +134,7 @@ dir2=datos1$y22
 
 
 ###################################################
-### code chunk number 4: mme_vignette.Rnw:453-466
+### code chunk number 4: mme_vignette.Rnw:452-465
 ###################################################
 
 #Plot direct estimator versus model estimator
@@ -153,7 +152,7 @@ abline(a=0,b=1)
 
 
 ###################################################
-### code chunk number 5: mme_vignette.Rnw:471-482
+### code chunk number 5: mme_vignette.Rnw:470-481
 ###################################################
 dos.ver<-matrix(1:2,1,2)
 layout(dos.ver)
@@ -169,7 +168,7 @@ abline(a=0,b=1)
 
 
 ###################################################
-### code chunk number 6: mme_vignette.Rnw:490-494
+### code chunk number 6: mme_vignette.Rnw:489-493
 ###################################################
 
 #Model estimator
@@ -178,7 +177,7 @@ datos1$yest2=result$mean[,2]
 
 
 ###################################################
-### code chunk number 7: mme_vignette.Rnw:499-526
+### code chunk number 7: mme_vignette.Rnw:498-525
 ###################################################
 
 
@@ -210,7 +209,7 @@ title(main="Small area estimator Y2", font.main=1.2,cex.main=1)
 
 
 ###################################################
-### code chunk number 8: mme_vignette.Rnw:530-554
+### code chunk number 8: mme_vignette.Rnw:529-553
 ###################################################
 dos.ver<-matrix(1:2,1,2)
 layout(dos.ver)
@@ -239,7 +238,7 @@ title(main="Small area estimator Y2", font.main=1.2,cex.main=1)
 
 
 ###################################################
-### code chunk number 9: mme_vignette.Rnw:561-571
+### code chunk number 9: mme_vignette.Rnw:560-570
 ###################################################
 ##Bootstrap parametric BIAS and MSE
 
@@ -254,7 +253,7 @@ cv=mse.pboot[[3]]
 
 
 ###################################################
-### code chunk number 10: mme_vignette.Rnw:575-593
+### code chunk number 10: mme_vignette.Rnw:574-592
 ###################################################
 dos.ver<-matrix(1:2,1,2)
 layout(dos.ver)
@@ -277,7 +276,7 @@ title(main="RMSE for the estimator of Y2", font.main=1.2,cex.main=1)
 
 
 ###################################################
-### code chunk number 11: mme_vignette.Rnw:598-615
+### code chunk number 11: mme_vignette.Rnw:597-614
 ###################################################
 dos.ver<-matrix(1:2,1,2)
 layout(dos.ver)

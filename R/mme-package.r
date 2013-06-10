@@ -27,7 +27,8 @@
 #' @name mme-package
 #' @aliases mme
 #' @docType package
-#' @import Matrix MASS mixstock 
+#' @import Matrix
+#' @import MASS
 NULL
 
 # Data set information
@@ -57,7 +58,6 @@ NULL
 #' @usage simdata
 #' @format A data frame with 15 rows and 9 variables in columns
 #' @examples
-#' require(Matrix)
 #'
 #' k=3 #number of categories of the response variable
 #' pp=c(1,1) #vector with the number of auxiliary variables in each category
@@ -108,8 +108,6 @@ NULL
 #' @format A data frame with 30 rows and 9 variables in columns
 #' @examples
 #' 
-#' library(mixstock)
-#' library(Matrix)
 #'
 #' k=3 #number of categories of the response variable
 #' pp=c(1,1) #vector with the number of auxiliary variables in each category
@@ -159,9 +157,6 @@ NULL
 #' @format A data frame with 40 rows and 9 variables in columns
 #' @examples
 #' \dontrun{
-#' library(mixstock)
-#' library(Matrix)
-#' library(MASS)
 #'
 #' k=3 #number of categories of the response variable
 #' pp=c(1,1) #vector with the number of auxiliary variables in each category

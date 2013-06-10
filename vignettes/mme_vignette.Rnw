@@ -410,7 +410,6 @@ d=simulaciones3(50,10,3)
 
 colnames(d)=c("area","time","sample","population","y1","y2","y3","x1","x2","y11","y22","y33")
 
-library(Matrix)
 datos=d
 @
 

@@ -1,4 +1,8 @@
 
+Version 0.1-5
+
+    o Changes in the function mseb and other changes (documentation, examples, dependencies).
+
 Version 0.1-4
 
     o Some changes (documentation, vignette, demo). First complete version.

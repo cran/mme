@@ -27,7 +27,6 @@
 #' Small area estimation of labour force indicators under a multinomial mixed model
 #' with correlated time and area effects. Submitted for review.
 #' @examples
-#' require(Matrix)
 #'
 #' k=3 #number of categories of the response variable
 #' pp=c(1,1) #vector with the number of auxiliary variables in each category
@@ -123,7 +122,6 @@ return(salida)
 #' Small area estimation of labour force indicators under a multinomial mixed model
 #' with correlated time and area effects. Submitted for review.
 #' @examples
-#' require(Matrix)
 #'
 #' k=3 #number of categories of the response variable
 #' pp=c(1,1) #vector with the number of auxiliary variables in each category
@@ -300,7 +298,6 @@ return(fisher)
 #' random effects. Biometrika,
 #' 78,719-727.
 #' @examples
-#' require(Matrix)
 #'
 #' k=3 #number of categories of the response variable
 #' pp=c(1,1) #vector with the number of auxiliary variables in each category
@@ -467,7 +464,6 @@ resul=list(phi1.new=phi1.new,phi2.new=phi2.new,rho.new=rho)
 #' Small area estimation of labour force indicator under a multinomial mixed model
 #' with correlated time and area effects. Submitted for review.
 #' @examples
-#' require(Matrix)
 #'
 #' k=3 #number of categories of the response variable
 #' pp=c(1,1) #vector with the number of auxiliary variables in each category
@@ -543,7 +539,6 @@ return(salida)
 #' random effects. Biometrika,
 #' 78,719-727.
 #' @examples
-#' require(Matrix)
 #'
 #' k=3 #number of categories of the response variable
 #' pp=c(1,1) #vector with the number of auxiliary variables in each category
@@ -801,9 +796,6 @@ return(score.F)
 #' with correlated time and area effects. Submitted for review.
 #' @examples
 #' \dontrun{
-#' library(mixstock)
-#' library(Matrix)
-#' library(MASS)
 #'
 #' k=3 #number of categories of the response variable
 #' pp=c(1,1) #vector with the number of auxiliary variables in each category
@@ -1015,9 +1007,6 @@ return(result)
 #' area estimators. Journal of the American Statistical Association, 85, 163-171.
 #' @examples
 #' \dontrun{
-#' library(mixstock)
-#' library(Matrix)
-#' library(MASS)
 #'
 #' k=3 #number of categories of the response variable
 #' pp=c(1,1) #vector with the number of auxiliary variables in each category

@@ -26,7 +26,6 @@
 #' Multinomial-based small area estimation of labour force indicators.
 #' Statistical Modelling, 13, 153-178.
 #' @examples
-#' require(Matrix)
 #'
 #' k=3 #number of categories of the response variable
 #' pp=c(1,1) #vector with the number of auxiliary variables in each category
@@ -103,7 +102,6 @@ return(phi.0=phi1.new)
 #' Lopez-Vizcaino, ME, Lombardia, MJ and Morales, D (2013). Small area estimation of labour force indicators under a multinomial mixed model
 #' with correlated time and area effects. Submitted for review.
 #' @examples
-#' library(Matrix)
 #'
 #' k=3 #number of categories of the response variable
 #' pp=c(1,1) #vector with the number of auxiliary variables in each category
@@ -194,7 +192,6 @@ return(result)
 #' Small area estimation of labour force indicator under a multinomial mixed model
 #' with correlated time and area effects. Submited for review.
 #' @examples
-#' require(Matrix)
 #'
 #' k=3 #number of categories of the response variable
 #' pp=c(1,1) #vector with the number of auxiliary variables in each category
@@ -269,7 +266,6 @@ prmu.time<-function(M,Xk,beta,u1,u2){
 #' Small area estimation of labour force indicator under a multinomial mixed model
 #' with correlated time and area effects. Submitted for review.
 #' @examples
-#' require(Matrix)
 #'
 #' k=3 #number of categories of the response variable
 #' pp=c(1,1) #vector with the number of auxiliary variables in each category
@@ -390,7 +386,6 @@ return(fisher)
 #' random effects. Biometrika,
 #' 78,719-727.
 #' @examples
-#' require(Matrix)
 #'
 #' k=3 #number of categories of the response variable
 #' pp=c(1,1) #vector with the number of auxiliary variables in each category
@@ -547,7 +542,6 @@ resul=list(phi1.new=phi1.new,phi2.new=phi2.new)
 #' random effects. Biometrika,
 #' 78,719-727.
 #' @examples
-#' require(Matrix)
 #'
 #' k=3 #number of categories of the response variable
 #' pp=c(1,1) #vector with the number of auxiliary variables in each category
@@ -749,8 +743,6 @@ return(score.F)
 #' Small area estimation of labour force indicators under a multinomial mixed model
 #' with correlated time and area effects. Submitted for review.
 #' @examples
-#' library(mixstock)
-#' library(Matrix)
 #'
 #' k=3 #number of categories of the response variable
 #' pp=c(1,1) #vector with the number of auxiliary variables in each category
@@ -943,8 +935,6 @@ return(result)
 #' @references Prasad, NGN, Rao, JNK (1990).The estimation of the mean squared error of small
 #' area estimators. Journal of the American Statistical Association, 85, 163-171.
 #' @examples
-#' library(mixstock)
-#' library(Matrix)
 #'
 #' k=3 #number of categories of the response variable
 #' pp=c(1,1) #vector with the number of auxiliary variables in each category
