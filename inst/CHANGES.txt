@@ -1,3 +1,6 @@
+Version 0.1-6
+
+    o Changes in some dependencies.
 
 Version 0.1-5
 

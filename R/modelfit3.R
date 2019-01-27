@@ -238,21 +238,21 @@ DDu2=bdiag(v)
 C22=as(C22,"sparseMatrix")+as(diag(rep((1/phi1),d)),"sparseMatrix")
 DD=DD+DDu2
 rm(B2_d,A_d,C2,B_d,D_d,D2_d,DDu2,S_beta_d,S_u2_dd, S_u2_d,S_u1,S_u2,C2_d,v)
-Fuu=as(rBind(cBind(C22,t(D2)),cBind(D2,DD)),"sparseMatrix")
+Fuu=as(rbind(cbind(C22,t(D2)),cbind(D2,DD)),"sparseMatrix")
 Fuu=as(solve(Fuu),"sparseMatrix")
 int=as(solve(DD),"sparseMatrix")
 rm(DD)
-Fuubb=rBind(t(B2),t(B))
+Fuubb=rbind(t(B2),t(B))
 A=solve(A-t(Fuubb)%*%Fuu%*%(Fuubb))
 Fub=-1*tcrossprod(A,Fuubb)%*%Fuu
 Fu1u1=solve(C22-t(D2)%*%int%*%D2)
 rm(C22,Fuu,B,B2)
 Fu1u2=-1*tcrossprod(Fu1u1,D2)%*%int
 Fu2u2=int+int%*%D2%*%tcrossprod(Fu1u1,D2)%*%int
-Fiuu=rBind(cBind(Fu1u1,Fu1u2),cBind(t(Fu1u2),Fu2u2))
+Fiuu=rbind(cbind(Fu1u1,Fu1u2),cbind(t(Fu1u2),Fu2u2))
 rm(int,D2)
 Fuu=Fiuu+Fiuu%*%Fuubb%*%tcrossprod(A,Fuubb)%*%Fiuu
-F=rBind(cBind(A,(Fub)),cBind(t(Fub),Fuu))
+F=rbind(cbind(A,(Fub)),cbind(t(Fub),Fuu))
 S=rbind(S_beta,rbind(S_u11,S_u22))
 rm(A,Fub,Fu1u1,Fu1u2,Fu2u2,Fiuu,Fuubb,S_beta,S_u11,S_u22,Fuu)
 
